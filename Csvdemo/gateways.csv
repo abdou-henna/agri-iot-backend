@@ -1,0 +1,2 @@
+id,gateway_id,name,created_at,last_seen_at,last_upload_at,last_upload_id,firmware_version
+9,GW01,,2026-04-30 12:51:19.196082+01,2026-05-21 05:52:12.702792+01,2026-05-21 05:52:12.702792+01,UPL-GW01-20260521-045119,gw-1.0.0

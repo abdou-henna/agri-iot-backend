@@ -91,6 +91,17 @@ def deterministic_uuid(*parts):
     return str(uuid.uuid5(uuid.NAMESPACE_URL, "|".join(parts)))
 
 
+def normalize_json_str(v, fallback="{}"):
+    s = (v or "").strip()
+    if not s:
+        return fallback
+    try:
+        json.loads(s)
+        return s
+    except Exception:
+        return fallback
+
+
 def infer_cluster_range(rows):
     valid = sorted(parse_dt(r["measured_at"]) for r in rows if parse_dt(r["measured_at"]) >= RTC_CUTOFF)
     if not valid:
@@ -308,6 +319,7 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
     if any((r.get("agro_event_id") or "").startswith("IRR-") for r in manual):
         style = "IRR-{dt}-P{pivot}"
     target_cycle = [("MAIN", "pivot_1", "P1"), ("N2", "pivot_2", "P2")]
+    irrig_details = json.dumps({"schedule": "8h_pause_resume", "pause_window": "17:00-22:00", "source": "scheduled_field_operation"})
     corrected, audit_rows, used_cycles = [], [], set()
     for i, r in enumerate(manual):
         if i >= len(cycles):
@@ -327,6 +339,7 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
         add_if_col(nr, "agro_event_id", final_id); add_if_col(nr, "gateway_id", "GW01")
         add_if_col(nr, "source", "scheduled_field_operation"); add_if_col(nr, "confidence", "exact")
         add_if_col(nr, "created_at", nr["started_at"]); add_if_col(nr, "updated_at", nr["started_at"])
+        add_if_col(nr, "details", irrig_details)
         if len(cycle["segments"]) > 1:
             add_if_col(nr, "notes", "paused_at_17:00_resumed_at_22:00")
         action = "kept" if (old_s == nr["started_at"] and (old_e or "") == nr["ended_at"] and old_t in (scope, node_id) and r.get("event_type","") == "irrigation_session") else "corrected"
@@ -342,6 +355,7 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
             add_if_col(resume, "notes", "paused_at_17:00_resumed_at_22:00")
             add_if_col(resume, "agro_event_id", f"{final_id}-R")
             add_if_col(resume, "created_at", resume["started_at"]); add_if_col(resume, "updated_at", resume["started_at"])
+            add_if_col(resume, "details", irrig_details)
             corrected.append(resume)
             audit_rows.append({"audit_id": f"AUD-{len(audit_rows)+1:04d}", "original_agro_event_id": r.get("agro_event_id",""), "final_agro_event_id": resume.get("agro_event_id",""),
                                "action": "corrected", "old_started_at": old_s, "new_started_at": resume["started_at"], "old_ended_at": old_e, "new_ended_at": resume["ended_at"],
@@ -369,6 +383,7 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
             add_if_col(row, "source", "scheduled_field_operation")
             add_if_col(row, "confidence", "exact")
             add_if_col(row, "created_at", row["started_at"]); add_if_col(row, "updated_at", row["started_at"])
+            add_if_col(row, "details", irrig_details)
             note = "paused_at_17:00_resumed_at_22:00" if len(cycle["segments"]) > 1 else f"Scheduled 8-hour irrigation cycle for {'Pivot 1' if pivot=='P1' else 'Pivot 2'}."
             add_if_col(row, "notes", note)
             generated.append(row)
@@ -377,6 +392,14 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
                                "old_target": "", "new_target": scope, "reason": "scheduled irrigation operation generated from declared real field schedule",
                                "limitations": "schedule-derived operational event; verify exact manual execution if used as field evidence"})
     agr_out = sorted(non_irrigation + corrected + generated, key=lambda r: parse_dt(r["started_at"]))
+    for r in agr_out:
+        is_irrigation = "irrigation" in (r.get("event_type", "") + "|" + r.get("event_category", "")).lower() or (r.get("agro_event_id", "") or "").startswith("IRR")
+        if is_irrigation:
+            add_if_col(r, "details", irrig_details)
+            add_if_col(r, "gateway_id", (r.get("gateway_id") or "").strip() or "GW01")
+            add_if_col(r, "created_at", (r.get("created_at") or "").strip() or r.get("started_at", ""))
+        add_if_col(r, "details", normalize_json_str(r.get("details", "")))
+        add_if_col(r, "created_at", (r.get("created_at") or "").strip() or r.get("started_at", ""))
     with (OUT_DIR / "agronomic_events_demo.csv").open("w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=agr_cols); w.writeheader(); w.writerows(agr_out)
 
@@ -465,6 +488,12 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
     assert len(ids) == len(set(ids))
     seen_start_target = set()
     for r in a_rows_out:
+        assert (r.get("details", "") or "").strip() != ""
+        json.loads(r["details"])
+        assert (r.get("created_at", "") or "").strip() != ""
+        rid = (r.get("id", "") or "").strip()
+        if rid:
+            uuid.UUID(rid)
         st = parse_dt(r["started_at"])
         assert field_start <= st <= field_end
         is_irrigation = "irrigation" in (r.get("event_type", "") + "|" + r.get("event_category", "")).lower()
@@ -472,6 +501,7 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
             ps = st.replace(hour=17, minute=0, second=0, microsecond=0)
             pe = st.replace(hour=22, minute=0, second=0, microsecond=0)
             assert not (ps <= st < pe)
+            assert (r.get("gateway_id", "") or "").strip() != ""
         if r.get("ended_at"):
             et = parse_dt(r["ended_at"])
             assert et >= st

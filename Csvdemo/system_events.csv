@@ -77,55 +77,55 @@ id,event_id,upload_id,gateway_id,node_id,event_type,severity,event_time,received
 3126,EVT-GW01-20260519-230244-209,UPL-GW01-20260520-053640,GW01,N2,node_missing,warning,2026-05-20 00:02:44+01,2026-05-20 06:38:08.132382+01,Node did not transmit during expected window,"{""frame_id"": 2965386, ""expected_slot"": ""soil""}",NODE_TIMEOUT
 3128,EVT-GW01-20260519-231236-211,UPL-GW01-20260520-053640,GW01,N2,node_missing,warning,2026-05-20 00:12:36+01,2026-05-20 06:38:08.132382+01,Node did not transmit during expected window,"{""frame_id"": 2965387, ""expected_slot"": ""soil""}",NODE_TIMEOUT
 3129,EVT-GW01-20260519-232228-212,UPL-GW01-20260520-053640,GW01,N2,node_missing,warning,2026-05-20 00:22:28+01,2026-05-20 06:38:08.132382+01,Node did not transmit during expected window,"{""frame_id"": 2965388, ""expected_slot"": ""soil""}",NODE_TIMEOUT
-3299,DEMO_EVT_3299,,,N2,signal_quality_degraded,warning,2026-05-12T12:00:00+01:00,2026-05-12T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=5,demo_missing
-3300,DEMO_EVT_3300,,,N2,node_missing,warning,2026-05-12T12:00:00+01:00,2026-05-12T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=5,demo_missing
-3301,DEMO_EVT_3301,,,N2,telemetry_restored,info,2026-05-12T14:00:00+01:00,2026-05-12T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=5,
-3302,DEMO_EVT_3302,,,N2,signal_quality_improved,info,2026-05-12T15:00:00+01:00,2026-05-12T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=5,
-3303,DEMO_EVT_3303,,,N2,signal_quality_degraded,warning,2026-05-14T12:00:00+01:00,2026-05-14T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=3,demo_missing
-3304,DEMO_EVT_3304,,,N2,node_missing,warning,2026-05-14T12:00:00+01:00,2026-05-14T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=3,demo_missing
-3305,DEMO_EVT_3305,,,N2,telemetry_restored,info,2026-05-14T14:00:00+01:00,2026-05-14T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=3,
-3306,DEMO_EVT_3306,,,N2,signal_quality_improved,info,2026-05-14T15:00:00+01:00,2026-05-14T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=3,
-3307,DEMO_EVT_3307,,,N2,signal_quality_degraded,warning,2026-05-15T12:00:00+01:00,2026-05-15T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=9,demo_missing
-3308,DEMO_EVT_3308,,,N2,node_missing,warning,2026-05-15T12:00:00+01:00,2026-05-15T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=9,demo_missing
-3309,DEMO_EVT_3309,,,N2,telemetry_restored,info,2026-05-15T14:00:00+01:00,2026-05-15T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=9,
-3310,DEMO_EVT_3310,,,N2,signal_quality_improved,info,2026-05-15T15:00:00+01:00,2026-05-15T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=9,
-3311,DEMO_EVT_3311,,,N2,signal_quality_degraded,warning,2026-05-18T12:00:00+01:00,2026-05-18T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=22,demo_missing
-3312,DEMO_EVT_3312,,,N2,node_missing,warning,2026-05-18T12:00:00+01:00,2026-05-18T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=22,demo_missing
-3313,DEMO_EVT_3313,,,N2,telemetry_restored,info,2026-05-18T14:00:00+01:00,2026-05-18T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=22,
-3314,DEMO_EVT_3314,,,N2,signal_quality_improved,info,2026-05-18T15:00:00+01:00,2026-05-18T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=22,
-3315,DEMO_EVT_3315,,,N2,signal_quality_degraded,warning,2026-05-20T12:00:00+01:00,2026-05-20T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=2,demo_missing
-3316,DEMO_EVT_3316,,,N2,node_missing,warning,2026-05-20T12:00:00+01:00,2026-05-20T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=2,demo_missing
-3317,DEMO_EVT_3317,,,N2,telemetry_restored,info,2026-05-20T14:00:00+01:00,2026-05-20T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=2,
-3318,DEMO_EVT_3318,,,N2,signal_quality_improved,info,2026-05-20T15:00:00+01:00,2026-05-20T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=2,
-3319,DEMO_EVT_3319,,,N3,signal_quality_degraded,warning,2026-05-12T12:00:00+01:00,2026-05-12T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=5,demo_missing
-3320,DEMO_EVT_3320,,,N3,node_missing,warning,2026-05-12T12:00:00+01:00,2026-05-12T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=5,demo_missing
-3321,DEMO_EVT_3321,,,N3,telemetry_restored,info,2026-05-12T14:00:00+01:00,2026-05-12T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=5,
-3322,DEMO_EVT_3322,,,N3,signal_quality_improved,info,2026-05-12T15:00:00+01:00,2026-05-12T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=5,
-3323,DEMO_EVT_3323,,,N3,signal_quality_degraded,warning,2026-05-13T12:00:00+01:00,2026-05-13T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=4,demo_missing
-3324,DEMO_EVT_3324,,,N3,node_missing,warning,2026-05-13T12:00:00+01:00,2026-05-13T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=4,demo_missing
-3325,DEMO_EVT_3325,,,N3,telemetry_restored,info,2026-05-13T14:00:00+01:00,2026-05-13T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=4,
-3326,DEMO_EVT_3326,,,N3,signal_quality_improved,info,2026-05-13T15:00:00+01:00,2026-05-13T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=4,
-3327,DEMO_EVT_3327,,,N3,signal_quality_degraded,warning,2026-05-15T12:00:00+01:00,2026-05-15T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=8,demo_missing
-3328,DEMO_EVT_3328,,,N3,node_missing,warning,2026-05-15T12:00:00+01:00,2026-05-15T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=8,demo_missing
-3329,DEMO_EVT_3329,,,N3,telemetry_restored,info,2026-05-15T14:00:00+01:00,2026-05-15T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=8,
-3330,DEMO_EVT_3330,,,N3,signal_quality_improved,info,2026-05-15T15:00:00+01:00,2026-05-15T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=8,
-3331,DEMO_EVT_3331,,,N3,signal_quality_degraded,warning,2026-05-16T12:00:00+01:00,2026-05-16T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=5,demo_missing
-3332,DEMO_EVT_3332,,,N3,node_missing,warning,2026-05-16T12:00:00+01:00,2026-05-16T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=5,demo_missing
-3333,DEMO_EVT_3333,,,N3,telemetry_restored,info,2026-05-16T14:00:00+01:00,2026-05-16T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=5,
-3334,DEMO_EVT_3334,,,N3,signal_quality_improved,info,2026-05-16T15:00:00+01:00,2026-05-16T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=5,
-3335,DEMO_EVT_3335,,,N3,signal_quality_degraded,warning,2026-05-17T12:00:00+01:00,2026-05-17T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=1,demo_missing
-3336,DEMO_EVT_3336,,,N3,node_missing,warning,2026-05-17T12:00:00+01:00,2026-05-17T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=1,demo_missing
-3337,DEMO_EVT_3337,,,N3,telemetry_restored,info,2026-05-17T14:00:00+01:00,2026-05-17T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=1,
-3338,DEMO_EVT_3338,,,N3,signal_quality_improved,info,2026-05-17T15:00:00+01:00,2026-05-17T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=1,
-3339,DEMO_EVT_3339,,,N3,signal_quality_degraded,warning,2026-05-18T12:00:00+01:00,2026-05-18T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=23,demo_missing
-3340,DEMO_EVT_3340,,,N3,node_missing,warning,2026-05-18T12:00:00+01:00,2026-05-18T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=23,demo_missing
-3341,DEMO_EVT_3341,,,N3,telemetry_restored,info,2026-05-18T14:00:00+01:00,2026-05-18T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=23,
-3342,DEMO_EVT_3342,,,N3,signal_quality_improved,info,2026-05-18T15:00:00+01:00,2026-05-18T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=23,
-3343,DEMO_EVT_3343,,,N3,signal_quality_degraded,warning,2026-05-19T12:00:00+01:00,2026-05-19T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=5,demo_missing
-3344,DEMO_EVT_3344,,,N3,node_missing,warning,2026-05-19T12:00:00+01:00,2026-05-19T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=5,demo_missing
-3345,DEMO_EVT_3345,,,N3,telemetry_restored,info,2026-05-19T14:00:00+01:00,2026-05-19T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=5,
-3346,DEMO_EVT_3346,,,N3,signal_quality_improved,info,2026-05-19T15:00:00+01:00,2026-05-19T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=5,
-3347,DEMO_EVT_3347,,,N3,signal_quality_degraded,warning,2026-05-20T12:00:00+01:00,2026-05-20T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=5,demo_missing
-3348,DEMO_EVT_3348,,,N3,node_missing,warning,2026-05-20T12:00:00+01:00,2026-05-20T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=5,demo_missing
-3349,DEMO_EVT_3349,,,N3,telemetry_restored,info,2026-05-20T14:00:00+01:00,2026-05-20T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=5,
-3350,DEMO_EVT_3350,,,N3,signal_quality_improved,info,2026-05-20T15:00:00+01:00,2026-05-20T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=5,
+3299,DEMO_EVT_3299,,,N2,signal_quality_degraded,warning,2026-05-12T12:00:00+01:00,2026-05-12T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,"{""missing_injected"": 5}",demo_missing
+3300,DEMO_EVT_3300,,,N2,node_missing,warning,2026-05-12T12:00:00+01:00,2026-05-12T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,"{""missing_injected"": 5}",demo_missing
+3301,DEMO_EVT_3301,,,N2,telemetry_restored,info,2026-05-12T14:00:00+01:00,2026-05-12T14:00:00+01:00,Telemetry restored in demo scenario.,"{""missing_injected"": 5}",
+3302,DEMO_EVT_3302,,,N2,signal_quality_improved,info,2026-05-12T15:00:00+01:00,2026-05-12T15:00:00+01:00,Signal quality improved in demo scenario.,"{""missing_injected"": 5}",
+3303,DEMO_EVT_3303,,,N2,signal_quality_degraded,warning,2026-05-14T12:00:00+01:00,2026-05-14T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,"{""missing_injected"": 3}",demo_missing
+3304,DEMO_EVT_3304,,,N2,node_missing,warning,2026-05-14T12:00:00+01:00,2026-05-14T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,"{""missing_injected"": 3}",demo_missing
+3305,DEMO_EVT_3305,,,N2,telemetry_restored,info,2026-05-14T14:00:00+01:00,2026-05-14T14:00:00+01:00,Telemetry restored in demo scenario.,"{""missing_injected"": 3}",
+3306,DEMO_EVT_3306,,,N2,signal_quality_improved,info,2026-05-14T15:00:00+01:00,2026-05-14T15:00:00+01:00,Signal quality improved in demo scenario.,"{""missing_injected"": 3}",
+3307,DEMO_EVT_3307,,,N2,signal_quality_degraded,warning,2026-05-15T12:00:00+01:00,2026-05-15T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,"{""missing_injected"": 9}",demo_missing
+3308,DEMO_EVT_3308,,,N2,node_missing,warning,2026-05-15T12:00:00+01:00,2026-05-15T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,"{""missing_injected"": 9}",demo_missing
+3309,DEMO_EVT_3309,,,N2,telemetry_restored,info,2026-05-15T14:00:00+01:00,2026-05-15T14:00:00+01:00,Telemetry restored in demo scenario.,"{""missing_injected"": 9}",
+3310,DEMO_EVT_3310,,,N2,signal_quality_improved,info,2026-05-15T15:00:00+01:00,2026-05-15T15:00:00+01:00,Signal quality improved in demo scenario.,"{""missing_injected"": 9}",
+3311,DEMO_EVT_3311,,,N2,signal_quality_degraded,warning,2026-05-18T12:00:00+01:00,2026-05-18T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,"{""missing_injected"": 22}",demo_missing
+3312,DEMO_EVT_3312,,,N2,node_missing,warning,2026-05-18T12:00:00+01:00,2026-05-18T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,"{""missing_injected"": 22}",demo_missing
+3313,DEMO_EVT_3313,,,N2,telemetry_restored,info,2026-05-18T14:00:00+01:00,2026-05-18T14:00:00+01:00,Telemetry restored in demo scenario.,"{""missing_injected"": 22}",
+3314,DEMO_EVT_3314,,,N2,signal_quality_improved,info,2026-05-18T15:00:00+01:00,2026-05-18T15:00:00+01:00,Signal quality improved in demo scenario.,"{""missing_injected"": 22}",
+3315,DEMO_EVT_3315,,,N2,signal_quality_degraded,warning,2026-05-20T12:00:00+01:00,2026-05-20T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,"{""missing_injected"": 2}",demo_missing
+3316,DEMO_EVT_3316,,,N2,node_missing,warning,2026-05-20T12:00:00+01:00,2026-05-20T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,"{""missing_injected"": 2}",demo_missing
+3317,DEMO_EVT_3317,,,N2,telemetry_restored,info,2026-05-20T14:00:00+01:00,2026-05-20T14:00:00+01:00,Telemetry restored in demo scenario.,"{""missing_injected"": 2}",
+3318,DEMO_EVT_3318,,,N2,signal_quality_improved,info,2026-05-20T15:00:00+01:00,2026-05-20T15:00:00+01:00,Signal quality improved in demo scenario.,"{""missing_injected"": 2}",
+3319,DEMO_EVT_3319,,,N3,signal_quality_degraded,warning,2026-05-12T12:00:00+01:00,2026-05-12T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,"{""missing_injected"": 5}",demo_missing
+3320,DEMO_EVT_3320,,,N3,node_missing,warning,2026-05-12T12:00:00+01:00,2026-05-12T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,"{""missing_injected"": 5}",demo_missing
+3321,DEMO_EVT_3321,,,N3,telemetry_restored,info,2026-05-12T14:00:00+01:00,2026-05-12T14:00:00+01:00,Telemetry restored in demo scenario.,"{""missing_injected"": 5}",
+3322,DEMO_EVT_3322,,,N3,signal_quality_improved,info,2026-05-12T15:00:00+01:00,2026-05-12T15:00:00+01:00,Signal quality improved in demo scenario.,"{""missing_injected"": 5}",
+3323,DEMO_EVT_3323,,,N3,signal_quality_degraded,warning,2026-05-13T12:00:00+01:00,2026-05-13T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,"{""missing_injected"": 4}",demo_missing
+3324,DEMO_EVT_3324,,,N3,node_missing,warning,2026-05-13T12:00:00+01:00,2026-05-13T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,"{""missing_injected"": 4}",demo_missing
+3325,DEMO_EVT_3325,,,N3,telemetry_restored,info,2026-05-13T14:00:00+01:00,2026-05-13T14:00:00+01:00,Telemetry restored in demo scenario.,"{""missing_injected"": 4}",
+3326,DEMO_EVT_3326,,,N3,signal_quality_improved,info,2026-05-13T15:00:00+01:00,2026-05-13T15:00:00+01:00,Signal quality improved in demo scenario.,"{""missing_injected"": 4}",
+3327,DEMO_EVT_3327,,,N3,signal_quality_degraded,warning,2026-05-15T12:00:00+01:00,2026-05-15T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,"{""missing_injected"": 8}",demo_missing
+3328,DEMO_EVT_3328,,,N3,node_missing,warning,2026-05-15T12:00:00+01:00,2026-05-15T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,"{""missing_injected"": 8}",demo_missing
+3329,DEMO_EVT_3329,,,N3,telemetry_restored,info,2026-05-15T14:00:00+01:00,2026-05-15T14:00:00+01:00,Telemetry restored in demo scenario.,"{""missing_injected"": 8}",
+3330,DEMO_EVT_3330,,,N3,signal_quality_improved,info,2026-05-15T15:00:00+01:00,2026-05-15T15:00:00+01:00,Signal quality improved in demo scenario.,"{""missing_injected"": 8}",
+3331,DEMO_EVT_3331,,,N3,signal_quality_degraded,warning,2026-05-16T12:00:00+01:00,2026-05-16T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,"{""missing_injected"": 5}",demo_missing
+3332,DEMO_EVT_3332,,,N3,node_missing,warning,2026-05-16T12:00:00+01:00,2026-05-16T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,"{""missing_injected"": 5}",demo_missing
+3333,DEMO_EVT_3333,,,N3,telemetry_restored,info,2026-05-16T14:00:00+01:00,2026-05-16T14:00:00+01:00,Telemetry restored in demo scenario.,"{""missing_injected"": 5}",
+3334,DEMO_EVT_3334,,,N3,signal_quality_improved,info,2026-05-16T15:00:00+01:00,2026-05-16T15:00:00+01:00,Signal quality improved in demo scenario.,"{""missing_injected"": 5}",
+3335,DEMO_EVT_3335,,,N3,signal_quality_degraded,warning,2026-05-17T12:00:00+01:00,2026-05-17T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,"{""missing_injected"": 1}",demo_missing
+3336,DEMO_EVT_3336,,,N3,node_missing,warning,2026-05-17T12:00:00+01:00,2026-05-17T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,"{""missing_injected"": 1}",demo_missing
+3337,DEMO_EVT_3337,,,N3,telemetry_restored,info,2026-05-17T14:00:00+01:00,2026-05-17T14:00:00+01:00,Telemetry restored in demo scenario.,"{""missing_injected"": 1}",
+3338,DEMO_EVT_3338,,,N3,signal_quality_improved,info,2026-05-17T15:00:00+01:00,2026-05-17T15:00:00+01:00,Signal quality improved in demo scenario.,"{""missing_injected"": 1}",
+3339,DEMO_EVT_3339,,,N3,signal_quality_degraded,warning,2026-05-18T12:00:00+01:00,2026-05-18T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,"{""missing_injected"": 23}",demo_missing
+3340,DEMO_EVT_3340,,,N3,node_missing,warning,2026-05-18T12:00:00+01:00,2026-05-18T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,"{""missing_injected"": 23}",demo_missing
+3341,DEMO_EVT_3341,,,N3,telemetry_restored,info,2026-05-18T14:00:00+01:00,2026-05-18T14:00:00+01:00,Telemetry restored in demo scenario.,"{""missing_injected"": 23}",
+3342,DEMO_EVT_3342,,,N3,signal_quality_improved,info,2026-05-18T15:00:00+01:00,2026-05-18T15:00:00+01:00,Signal quality improved in demo scenario.,"{""missing_injected"": 23}",
+3343,DEMO_EVT_3343,,,N3,signal_quality_degraded,warning,2026-05-19T12:00:00+01:00,2026-05-19T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,"{""missing_injected"": 5}",demo_missing
+3344,DEMO_EVT_3344,,,N3,node_missing,warning,2026-05-19T12:00:00+01:00,2026-05-19T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,"{""missing_injected"": 5}",demo_missing
+3345,DEMO_EVT_3345,,,N3,telemetry_restored,info,2026-05-19T14:00:00+01:00,2026-05-19T14:00:00+01:00,Telemetry restored in demo scenario.,"{""missing_injected"": 5}",
+3346,DEMO_EVT_3346,,,N3,signal_quality_improved,info,2026-05-19T15:00:00+01:00,2026-05-19T15:00:00+01:00,Signal quality improved in demo scenario.,"{""missing_injected"": 5}",
+3347,DEMO_EVT_3347,,,N3,signal_quality_degraded,warning,2026-05-20T12:00:00+01:00,2026-05-20T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,"{""missing_injected"": 5}",demo_missing
+3348,DEMO_EVT_3348,,,N3,node_missing,warning,2026-05-20T12:00:00+01:00,2026-05-20T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,"{""missing_injected"": 5}",demo_missing
+3349,DEMO_EVT_3349,,,N3,telemetry_restored,info,2026-05-20T14:00:00+01:00,2026-05-20T14:00:00+01:00,Telemetry restored in demo scenario.,"{""missing_injected"": 5}",
+3350,DEMO_EVT_3350,,,N3,signal_quality_improved,info,2026-05-20T15:00:00+01:00,2026-05-20T15:00:00+01:00,Signal quality improved in demo scenario.,"{""missing_injected"": 5}",

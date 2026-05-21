@@ -343,12 +343,21 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
     for e in out_events:
         up = (e.get("upload_id") or "").strip()
         by_upload_events[up].append(e)
+    max_upload_id = 0
+    for u in upload_rows:
+        try:
+            max_upload_id = max(max_upload_id, int((u.get("id") or "").strip()))
+        except Exception:
+            continue
+    next_upload_id = max_upload_id + 1 if max_upload_id > 0 else 1
     uploads_out = []
     for up_id, rr in sorted(by_upload_readings.items(), key=lambda x: min(parse_dt(i["measured_at"]) for i in x[1])):
         ev = by_upload_events.get(up_id, [])
         start = min(parse_dt(i["measured_at"]) for i in rr).isoformat()
         finish = max(parse_dt(i["measured_at"]) for i in rr).isoformat()
         rec = {c: "" for c in upload_cols}
+        add_if_col(rec, "id", str(next_upload_id))
+        next_upload_id += 1
         add_if_col(rec, "upload_id", up_id)
         add_if_col(rec, "gateway_id", "GW01")
         add_if_col(rec, "status", "completed")
@@ -545,6 +554,22 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
     with (OUT_DIR / "system_events_demo.csv").open(newline="", encoding="utf-8") as f:
         ev_out = list(csv.DictReader(f))
     assert all(RTC_CUTOFF <= parse_dt(e["event_time"]) <= field_end and parse_dt(e["event_time"]) >= field_start for e in ev_out)
+
+    u_cols_out, u_rows_out = load_csv(OUT_DIR / "uploads_demo.csv")
+    assert u_cols_out == upload_cols
+    assert all((r.get("id") or "").strip() != "" for r in u_rows_out)
+    assert len({r.get("upload_id", "") for r in u_rows_out}) == len(u_rows_out)
+    sr_upload_ids = {(r.get("upload_id") or "").strip() for r in out_rows}
+    u_upload_ids = {(r.get("upload_id") or "").strip() for r in u_rows_out}
+    assert sr_upload_ids.issubset(u_upload_ids)
+    ev_upload_ids = {(e.get("upload_id") or "").strip() for e in ev_out if (e.get("upload_id") or "").strip()}
+    assert ev_upload_ids.issubset(u_upload_ids)
+    assert sum(int((r.get("records_count") or "0").strip() or 0) for r in u_rows_out) == len(out_rows)
+    assert sum(int((r.get("events_count") or "0").strip() or 0) for r in u_rows_out) == len(ev_out)
+    for r in u_rows_out:
+        rs = (r.get("raw_summary") or "").strip()
+        if rs:
+            json.loads(rs)
 
     assert all("2026-05-12" <= r["date"] <= "2026-05-20" for r in qrows)
     assert all(field_start <= parse_dt(a["measured_at"]) <= field_end for a in audit)

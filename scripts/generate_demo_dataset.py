@@ -4,6 +4,7 @@ import csv
 import hashlib
 import json
 import random
+import uuid
 from collections import Counter, defaultdict
 from copy import deepcopy
 from datetime import datetime, timedelta
@@ -53,6 +54,52 @@ def load_csv(path):
     with path.open(newline="", encoding="utf-8") as f:
         r = csv.DictReader(f)
         return r.fieldnames, list(r)
+
+
+def split_cycle_segments(start_at, duration):
+    pause_start = start_at.replace(hour=17, minute=0, second=0, microsecond=0)
+    pause_end = start_at.replace(hour=22, minute=0, second=0, microsecond=0)
+    end_at = start_at + duration
+    if start_at < pause_start and end_at > pause_start:
+        seg1 = (start_at, pause_start)
+        remaining = end_at - pause_start
+        seg2_start = pause_end
+        seg2_end = seg2_start + remaining
+        return [seg1, (seg2_start, seg2_end)]
+    return [(start_at, end_at)]
+
+
+def build_irrigation_cycles(field_start, field_end, start_at, interval_hours=8, duration_hours=8):
+    out = []
+    cur = start_at
+    duration = timedelta(hours=duration_hours)
+    idx = 0
+    while cur <= field_end:
+        if cur >= field_start:
+            out.append({"cycle_idx": idx, "cycle_start": cur, "segments": split_cycle_segments(cur, duration)})
+            idx += 1
+        cur += timedelta(hours=interval_hours)
+    return out
+
+
+def add_if_col(row, col, value):
+    if col in row:
+        row[col] = value
+
+
+def deterministic_uuid(*parts):
+    return str(uuid.uuid5(uuid.NAMESPACE_URL, "|".join(parts)))
+
+
+def normalize_json_str(v, fallback="{}"):
+    s = (v or "").strip()
+    if not s:
+        return fallback
+    try:
+        json.loads(s)
+        return s
+    except Exception:
+        return fallback
 
 
 def infer_cluster_range(rows):
@@ -238,13 +285,153 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
             t = (datetime.fromisoformat(ts)+timedelta(hours=dh)).isoformat()
             if t < field_start.isoformat() or t > field_end.isoformat():
                 continue
-            out_events.append({"id": str(next_id), "event_id": f"DEMO_EVT_{next_id}", "upload_id": "", "gateway_id": "",
+            out_events.append({"id": str(next_id), "event_id": f"DEMO_EVT_{next_id}", "upload_id": "", "gateway_id": "GW01",
                                "node_id": node, "event_type": et, "severity": sev, "event_time": t, "received_at": t,
-                               "message": msg, "details": f"missing_injected={cnt}", "error_code": err})
+                               "message": msg, "details": json.dumps({"missing_injected": cnt}), "error_code": err})
             next_id += 1
 
     with (OUT_DIR / "system_events_demo.csv").open("w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=event_cols); w.writeheader(); w.writerows(out_events)
+
+    agr_path = CSV_DIR / "agronomic_events.csv"
+    if not agr_path.exists():
+        raise RuntimeError("csv/agronomic_events.csv not found; schema cannot be inferred.")
+    agr_cols, agr_rows = load_csv(agr_path)
+    if not agr_cols:
+        raise RuntimeError("csv/agronomic_events.csv empty header; schema cannot be inferred.")
+    in_window = []
+    for r in agr_rows:
+        try:
+            s = parse_dt(r["started_at"])
+            if field_start <= s <= field_end:
+                in_window.append(deepcopy(r))
+        except Exception:
+            continue
+    def is_irr(r):
+        return r.get("event_category", "").lower() == "irrigation" or "irrigation" in r.get("event_type", "").lower() or r.get("agro_event_id", "").startswith("IRR")
+    manual = [r for r in in_window if is_irr(r)]
+    non_irrigation = [r for r in in_window if not is_irr(r)]
+    durs = [parse_dt(r["ended_at"]) - parse_dt(r["started_at"]) for r in manual if r.get("ended_at")]
+    duration = sorted(durs)[len(durs)//2] if durs else timedelta(hours=8)
+    cycles = build_irrigation_cycles(field_start, field_end, datetime.fromisoformat("2026-05-12T07:00:00+01:00"), 8, int(duration.total_seconds()//3600) or 8)
+    manual = sorted(manual, key=lambda r: parse_dt(r["started_at"]))
+    style = "IRR-{dt}-P{pivot}"
+    if any((r.get("agro_event_id") or "").startswith("IRR-") for r in manual):
+        style = "IRR-{dt}-P{pivot}"
+    target_cycle = [("MAIN", "pivot_1", "P1"), ("N2", "pivot_2", "P2")]
+    irrig_details = json.dumps({"schedule": "8h_pause_resume", "pause_window": "17:00-22:00", "source": "scheduled_field_operation"})
+    corrected, audit_rows, used_cycles = [], [], set()
+    for i, r in enumerate(manual):
+        if i >= len(cycles):
+            break
+        cycle = cycles[i]
+        exp_start = cycle["segments"][0][0]
+        exp_end = cycle["segments"][0][1]
+        node_id, scope, pivot = target_cycle[cycle["cycle_idx"] % 2]
+        old_s, old_e = r.get("started_at", ""), r.get("ended_at", "")
+        old_t = r.get("target_scope", "") or r.get("node_id", "")
+        nr = deepcopy(r)
+        nr["started_at"] = exp_start.isoformat()
+        nr["ended_at"] = exp_end.isoformat()
+        add_if_col(nr, "node_id", node_id); add_if_col(nr, "target_scope", scope)
+        add_if_col(nr, "event_category", "irrigation"); add_if_col(nr, "event_type", "irrigation_session")
+        final_id = style.format(dt=exp_start.strftime("%Y%m%d-%H%M"), pivot="1" if pivot == "P1" else "2")
+        add_if_col(nr, "agro_event_id", final_id); add_if_col(nr, "gateway_id", "GW01")
+        add_if_col(nr, "source", "scheduled_field_operation"); add_if_col(nr, "confidence", "exact")
+        add_if_col(nr, "created_at", nr["started_at"]); add_if_col(nr, "updated_at", nr["started_at"])
+        add_if_col(nr, "details", irrig_details)
+        add_if_col(nr, "id", deterministic_uuid("agronomic_irrigation", nr.get("agro_event_id", ""), nr.get("started_at", ""), nr.get("ended_at", ""), nr.get("target_scope", "") or nr.get("node_id", "")))
+        if len(cycle["segments"]) > 1:
+            add_if_col(nr, "notes", "paused_at_17:00_resumed_at_22:00")
+        action = "kept" if (old_s == nr["started_at"] and (old_e or "") == nr["ended_at"] and old_t in (scope, node_id) and r.get("event_type","") == "irrigation_session") else "corrected"
+        audit_rows.append({"audit_id": f"AUD-{len(audit_rows)+1:04d}", "original_agro_event_id": r.get("agro_event_id",""), "final_agro_event_id": nr.get("agro_event_id",""),
+                           "action": action, "old_started_at": old_s, "new_started_at": nr["started_at"], "old_ended_at": old_e, "new_ended_at": nr["ended_at"],
+                           "old_target": old_t, "new_target": scope, "reason": "scheduled irrigation operation generated from declared real field schedule",
+                           "limitations": "schedule-derived operational event; verify exact manual execution if used as field evidence"})
+        corrected.append(nr); used_cycles.add(i)
+        if len(cycle["segments"]) > 1:
+            resume = deepcopy(nr)
+            resume["started_at"] = cycle["segments"][1][0].isoformat()
+            resume["ended_at"] = cycle["segments"][1][1].isoformat()
+            add_if_col(resume, "notes", "paused_at_17:00_resumed_at_22:00")
+            add_if_col(resume, "agro_event_id", f"{final_id}-R")
+            add_if_col(resume, "created_at", resume["started_at"]); add_if_col(resume, "updated_at", resume["started_at"])
+            add_if_col(resume, "details", irrig_details)
+            add_if_col(resume, "id", deterministic_uuid("agronomic_irrigation", resume.get("agro_event_id", ""), resume.get("started_at", ""), resume.get("ended_at", ""), resume.get("target_scope", "") or resume.get("node_id", "")))
+            corrected.append(resume)
+            audit_rows.append({"audit_id": f"AUD-{len(audit_rows)+1:04d}", "original_agro_event_id": r.get("agro_event_id",""), "final_agro_event_id": resume.get("agro_event_id",""),
+                               "action": "corrected", "old_started_at": old_s, "new_started_at": resume["started_at"], "old_ended_at": old_e, "new_ended_at": resume["ended_at"],
+                               "old_target": old_t, "new_target": scope, "reason": "scheduled irrigation operation generated from declared real field schedule",
+                               "limitations": "schedule-derived operational event; verify exact manual execution if used as field evidence"})
+    last_idx = max(used_cycles) if used_cycles else -1
+    generated = []
+    for i in range(last_idx + 1, len(cycles)):
+        cycle = cycles[i]
+        node_id, scope, pivot = target_cycle[cycle["cycle_idx"] % 2]
+        base_id = style.format(dt=cycle["cycle_start"].strftime("%Y%m%d-%H%M"), pivot="1" if pivot == "P1" else "2")
+        for seg_idx, (st, end) in enumerate(cycle["segments"]):
+            if st > field_end or end < field_start:
+                continue
+            row = {c: "" for c in agr_cols}
+            add_if_col(row, "id", deterministic_uuid("agronomic_irrigation", base_id, st.isoformat(), str(seg_idx)))
+            add_if_col(row, "node_id", node_id)
+            add_if_col(row, "agro_event_id", base_id if seg_idx == 0 else f"{base_id}-R")
+            add_if_col(row, "gateway_id", "GW01")
+            add_if_col(row, "event_category", "irrigation")
+            add_if_col(row, "event_type", "irrigation_session")
+            add_if_col(row, "target_scope", scope)
+            add_if_col(row, "started_at", st.isoformat())
+            add_if_col(row, "ended_at", end.isoformat())
+            add_if_col(row, "source", "scheduled_field_operation")
+            add_if_col(row, "confidence", "exact")
+            add_if_col(row, "created_at", row["started_at"]); add_if_col(row, "updated_at", row["started_at"])
+            add_if_col(row, "details", irrig_details)
+            add_if_col(row, "id", deterministic_uuid("agronomic_irrigation", row.get("agro_event_id", ""), row.get("started_at", ""), row.get("ended_at", ""), row.get("target_scope", "") or row.get("node_id", "")))
+            note = "paused_at_17:00_resumed_at_22:00" if len(cycle["segments"]) > 1 else f"Scheduled 8-hour irrigation cycle for {'Pivot 1' if pivot=='P1' else 'Pivot 2'}."
+            add_if_col(row, "notes", note)
+            generated.append(row)
+            audit_rows.append({"audit_id": f"AUD-{len(audit_rows)+1:04d}", "original_agro_event_id": "", "final_agro_event_id": row.get("agro_event_id",""),
+                               "action": "generated", "old_started_at": "", "new_started_at": row["started_at"], "old_ended_at": "", "new_ended_at": row["ended_at"],
+                               "old_target": "", "new_target": scope, "reason": "scheduled irrigation operation generated from declared real field schedule",
+                               "limitations": "schedule-derived operational event; verify exact manual execution if used as field evidence"})
+    agr_out = sorted(non_irrigation + corrected + generated, key=lambda r: parse_dt(r["started_at"]))
+    for r in agr_out:
+        is_irrigation = "irrigation" in (r.get("event_type", "") + "|" + r.get("event_category", "")).lower() or (r.get("agro_event_id", "") or "").startswith("IRR")
+        if is_irrigation:
+            add_if_col(r, "details", irrig_details)
+            add_if_col(r, "gateway_id", (r.get("gateway_id") or "").strip() or "GW01")
+            add_if_col(r, "created_at", (r.get("created_at") or "").strip() or r.get("started_at", ""))
+        add_if_col(r, "details", normalize_json_str(r.get("details", "")))
+        add_if_col(r, "created_at", (r.get("created_at") or "").strip() or r.get("started_at", ""))
+    with (OUT_DIR / "agronomic_events_demo.csv").open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=agr_cols); w.writeheader(); w.writerows(agr_out)
+
+    with (OUT_DIR / "irrigation_schedule_audit.csv").open("w", newline="", encoding="utf-8") as f:
+        cols = ["audit_id", "original_agro_event_id", "final_agro_event_id", "action", "old_started_at", "new_started_at", "old_ended_at", "new_ended_at", "old_target", "new_target", "reason", "limitations"]
+        w = csv.DictWriter(f, fieldnames=cols); w.writeheader(); w.writerows(audit_rows)
+
+    summary = []
+    by_date = defaultdict(list)
+    expected_by_date = defaultdict(int)
+    for cycle in cycles:
+        expected_by_date[cycle["cycle_start"].date().isoformat()] += len(cycle["segments"])
+    for a in audit_rows:
+        by_date[a["new_started_at"][:10]].append(a)
+    for d in sorted(expected_by_date):
+        items = by_date.get(d, [])
+        summary.append({
+            "date": d,
+            "expected_cycles": expected_by_date[d],
+            "kept_manual_cycles": sum(1 for i in items if i["action"] == "kept"),
+            "corrected_manual_cycles": sum(1 for i in items if i["action"] == "corrected"),
+            "generated_cycles": sum(1 for i in items if i["action"] == "generated"),
+            "first_cycle": min([i["new_started_at"] for i in items], default=""),
+            "last_cycle": max([i["new_started_at"] for i in items], default=""),
+            "notes": "8-hour scheduled irrigation cycles constrained to 05:00-22:00 and field window",
+        })
+    with (OUT_DIR / "irrigation_schedule_summary.csv").open("w", newline="", encoding="utf-8") as f:
+        cols = ["date", "expected_cycles", "kept_manual_cycles", "corrected_manual_cycles", "generated_cycles", "first_cycle", "last_cycle", "notes"]
+        w = csv.DictWriter(f, fieldnames=cols); w.writeheader(); w.writerows(summary)
 
     acols = ["audit_id", "original_id", "demo_id", "node_id", "measured_at", "changed_fields", "original_status", "demo_status", "method", "confidence", "source_rows_used", "source_nodes_used", "reason", "limitations"]
     with (OUT_DIR / "demo_generation_audit.csv").open("w", newline="", encoding="utf-8") as f:
@@ -298,11 +485,46 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
 
     assert src_hash == {p.name: sha(p) for p in [sensor_path, events_path, uploads_path]}
 
+    a_cols_out, a_rows_out = load_csv(OUT_DIR / "agronomic_events_demo.csv")
+    assert a_cols_out == agr_cols
+    ids = [r.get("agro_event_id", "") for r in a_rows_out if r.get("agro_event_id", "")]
+    assert len(ids) == len(set(ids))
+    pk_ids = [r.get("id", "") for r in a_rows_out if (r.get("id", "") or "").strip()]
+    assert len(pk_ids) == len(set(pk_ids))
+    seen_start_target = set()
+    for r in a_rows_out:
+        assert (r.get("details", "") or "").strip() != ""
+        json.loads(r["details"])
+        assert (r.get("created_at", "") or "").strip() != ""
+        rid = (r.get("id", "") or "").strip()
+        if rid:
+            uuid.UUID(rid)
+        st = parse_dt(r["started_at"])
+        assert field_start <= st <= field_end
+        is_irrigation = "irrigation" in (r.get("event_type", "") + "|" + r.get("event_category", "")).lower()
+        if is_irrigation:
+            ps = st.replace(hour=17, minute=0, second=0, microsecond=0)
+            pe = st.replace(hour=22, minute=0, second=0, microsecond=0)
+            assert not (ps <= st < pe)
+            assert (r.get("gateway_id", "") or "").strip() != ""
+        if r.get("ended_at"):
+            et = parse_dt(r["ended_at"])
+            assert et >= st
+            if is_irrigation:
+                ps = st.replace(hour=17, minute=0, second=0, microsecond=0)
+                pe = st.replace(hour=22, minute=0, second=0, microsecond=0)
+                assert et <= ps or st >= pe
+        tgt = r.get("target_scope", "") or r.get("node_id", "") or "farm"
+        key = (r["started_at"], tgt)
+        assert key not in seen_start_target
+        seen_start_target.add(key)
+
     return {"field_start": field_start.isoformat(), "field_end": field_end.isoformat(),
             "inferred_cluster_start": inferred_start.isoformat() if inferred_start else None,
             "inferred_cluster_end": inferred_end.isoformat() if inferred_end else None,
             "rtc_excluded": len(rtc_invalid), "outside_field_excluded": len(outside_field),
-            "sensor_demo_rows": len(out_rows), "events_demo_rows": len(ev_out), "audit_rows": len(audit)}
+            "sensor_demo_rows": len(out_rows), "events_demo_rows": len(ev_out), "audit_rows": len(audit),
+            "generated_irrigation_events": len(generated)}
 
 
 if __name__ == "__main__":

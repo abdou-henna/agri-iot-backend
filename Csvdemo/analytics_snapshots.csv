@@ -1,0 +1,2 @@
+snapshot_id,domain,node_id,metric,window_start,window_end,bucket,analytics_version,qc_version,calibration_version,filters_hash,cursor_json,payload_json,quality_json,invalidated,invalidation_reason,created_at,updated_at
+test-snapshot,sensor_readings,,,2024-01-01 01:00:00+01,2024-01-02 01:00:00+01,hour,v1,v1,,test,{},{},{},f,,2026-05-05 11:59:21.618039+01,2026-05-05 11:59:21.618039+01

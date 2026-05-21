@@ -1,21 +1,14 @@
 # Demo Dataset Methodology
 
-- `scripts/generate_demo_dataset.py` reads raw CSV exports and never edits source files.
-- Default explicit demo field window is `2026-05-12T00:00:00+01:00` through `2026-05-20T23:59:59+01:00`.
-- Rows outside that explicit window are excluded from generated demo outputs.
-- Demo sensor output keeps exact `csv/sensor_readings.csv` schema and column order.
-- Reconstruction first restores N2/N3 missing/error rows when required fields can be responsibly derived.
-- Controlled synthetic missingness is injected mainly for N2/N3 for dashboard QC/reliability testing, with audit provenance.
-- MAIN remains excellent/stable.
-- All generated artifacts stay local in `demo_dataset/` and are git-ignored.
-- Demo dataset is synthetic/derived and not field-truth evidence.
-- Agronomic irrigation events are generated from a declared operational schedule:
-  - Start at `2026-05-12T07:00:00+01:00`
-  - Repeat every 8 hours
-  - Daily pause window is `17:00`–`22:00`; overlapping cycles are split into pause/resume segments with resume after `22:00`
-  - Resume segments are retained as irrigation events (not dropped) and may start after `22:00`
-- `agronomic_events_demo.csv` preserves source `csv/agronomic_events.csv` schema and column order.
-- Existing field-window agronomic rows are preserved; generated irrigation rows are appended without duplicate start-time+target keys.
-- Additional irrigation artifacts are emitted to:
-  - `demo_dataset/irrigation_schedule_audit.csv`
-  - `demo_dataset/irrigation_schedule_summary.csv`
+- Reconstruct missing/error sensor rows for N2/N3 using nearest-neighbor interpolation, hourly node medians, and bounded fallback.
+- Keep MAIN untouched.
+- Apply low controlled missingness only for realism, with stricter cap for N3 continuity.
+- Build `system_events_demo.csv` directly from `sensor_readings_demo.csv`:
+  - `packet_received` for `ok`
+  - `node_missing` for `missing/error`
+  - `node_back_online` for missing->ok transitions
+- Remove demo-style error codes and use `NODE_TELEMETRY_MISSING` only for missing telemetry where needed.
+- Normalize non-empty gateway IDs to `GW01` when absent.
+- Generate `uploads_demo.csv` from demo readings/events with deterministic upload grouping and exact counts.
+- Preserve source CSV column order and PostgreSQL import compatibility.
+- Keep deterministic output with fixed seed (`20260521`).

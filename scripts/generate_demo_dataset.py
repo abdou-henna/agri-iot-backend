@@ -340,6 +340,7 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
         add_if_col(nr, "source", "scheduled_field_operation"); add_if_col(nr, "confidence", "exact")
         add_if_col(nr, "created_at", nr["started_at"]); add_if_col(nr, "updated_at", nr["started_at"])
         add_if_col(nr, "details", irrig_details)
+        add_if_col(nr, "id", deterministic_uuid("agronomic_irrigation", nr.get("agro_event_id", ""), nr.get("started_at", ""), nr.get("ended_at", ""), nr.get("target_scope", "") or nr.get("node_id", "")))
         if len(cycle["segments"]) > 1:
             add_if_col(nr, "notes", "paused_at_17:00_resumed_at_22:00")
         action = "kept" if (old_s == nr["started_at"] and (old_e or "") == nr["ended_at"] and old_t in (scope, node_id) and r.get("event_type","") == "irrigation_session") else "corrected"
@@ -356,6 +357,7 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
             add_if_col(resume, "agro_event_id", f"{final_id}-R")
             add_if_col(resume, "created_at", resume["started_at"]); add_if_col(resume, "updated_at", resume["started_at"])
             add_if_col(resume, "details", irrig_details)
+            add_if_col(resume, "id", deterministic_uuid("agronomic_irrigation", resume.get("agro_event_id", ""), resume.get("started_at", ""), resume.get("ended_at", ""), resume.get("target_scope", "") or resume.get("node_id", "")))
             corrected.append(resume)
             audit_rows.append({"audit_id": f"AUD-{len(audit_rows)+1:04d}", "original_agro_event_id": r.get("agro_event_id",""), "final_agro_event_id": resume.get("agro_event_id",""),
                                "action": "corrected", "old_started_at": old_s, "new_started_at": resume["started_at"], "old_ended_at": old_e, "new_ended_at": resume["ended_at"],
@@ -384,6 +386,7 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
             add_if_col(row, "confidence", "exact")
             add_if_col(row, "created_at", row["started_at"]); add_if_col(row, "updated_at", row["started_at"])
             add_if_col(row, "details", irrig_details)
+            add_if_col(row, "id", deterministic_uuid("agronomic_irrigation", row.get("agro_event_id", ""), row.get("started_at", ""), row.get("ended_at", ""), row.get("target_scope", "") or row.get("node_id", "")))
             note = "paused_at_17:00_resumed_at_22:00" if len(cycle["segments"]) > 1 else f"Scheduled 8-hour irrigation cycle for {'Pivot 1' if pivot=='P1' else 'Pivot 2'}."
             add_if_col(row, "notes", note)
             generated.append(row)
@@ -486,6 +489,8 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
     assert a_cols_out == agr_cols
     ids = [r.get("agro_event_id", "") for r in a_rows_out if r.get("agro_event_id", "")]
     assert len(ids) == len(set(ids))
+    pk_ids = [r.get("id", "") for r in a_rows_out if (r.get("id", "") or "").strip()]
+    assert len(pk_ids) == len(set(pk_ids))
     seen_start_target = set()
     for r in a_rows_out:
         assert (r.get("details", "") or "").strip() != ""

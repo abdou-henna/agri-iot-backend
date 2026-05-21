@@ -1,0 +1,131 @@
+id,event_id,upload_id,gateway_id,node_id,event_type,severity,event_time,received_at,message,details,error_code
+1138,EVT-GW01-20260512-064509-001,UPL-GW01-20260513-052903,GW01,N2,packet_received,info,2026-05-12 07:45:09+01,2026-05-13 06:29:28.371691+01,Soil packet received,{},
+1140,EVT-GW01-20260512-065504-003,UPL-GW01-20260513-052903,GW01,N2,packet_received,info,2026-05-12 07:55:04+01,2026-05-13 06:29:28.371691+01,Soil packet received,{},
+1142,EVT-GW01-20260512-070457-005,UPL-GW01-20260513-052903,GW01,N2,packet_received,info,2026-05-12 08:04:57+01,2026-05-13 06:29:28.371691+01,Soil packet received,{},
+1139,EVT-GW01-20260512-064541-002,UPL-GW01-20260513-052903,GW01,N3,packet_received,info,2026-05-12 07:45:41+01,2026-05-13 06:29:28.371691+01,Weather packet received,{},
+1141,EVT-GW01-20260512-065534-004,UPL-GW01-20260513-052903,GW01,N3,packet_received,info,2026-05-12 07:55:34+01,2026-05-13 06:29:28.371691+01,Weather packet received,{},
+1143,EVT-GW01-20260512-070528-006,UPL-GW01-20260513-052903,GW01,N3,packet_received,info,2026-05-12 08:05:28+01,2026-05-13 06:29:28.371691+01,Weather packet received,{},
+1283,EVT-GW01-20260512-181645-146,UPL-GW01-20260513-052903,GW01,MAIN,unknown_packet,warning,2026-05-12 19:16:45+01,2026-05-13 06:29:49.084768+01,Received packet from unknown node,{},UNKNOWN_NODE
+1326,EVT-GW01-20260512-213409-189,UPL-GW01-20260513-052903,GW01,MAIN,unknown_packet,warning,2026-05-12 22:34:09+01,2026-05-13 06:29:54.898366+01,Received packet from unknown node,{},UNKNOWN_NODE
+1346,EVT-GW01-20260512-230247-209,UPL-GW01-20260513-052903,GW01,N2,packet_received,info,2026-05-13 00:02:47+01,2026-05-13 06:29:57.854064+01,Soil packet received,{},
+1348,EVT-GW01-20260512-231240-211,UPL-GW01-20260513-052903,GW01,N2,packet_received,info,2026-05-13 00:12:40+01,2026-05-13 06:29:59.263394+01,Soil packet received,{},
+1350,EVT-GW01-20260512-232233-213,UPL-GW01-20260513-052903,GW01,N2,packet_received,info,2026-05-13 00:22:33+01,2026-05-13 06:29:59.263394+01,Soil packet received,{},
+1347,EVT-GW01-20260512-230340-210,UPL-GW01-20260513-052903,GW01,N3,node_missing,warning,2026-05-13 00:03:40+01,2026-05-13 06:29:57.854064+01,Node did not transmit during expected window,"{""frame_id"": 2964378, ""expected_slot"": ""weather""}",NODE_TIMEOUT
+1349,EVT-GW01-20260512-231333-212,UPL-GW01-20260513-052903,GW01,N3,node_missing,warning,2026-05-13 00:13:33+01,2026-05-13 06:29:59.263394+01,Node did not transmit during expected window,"{""frame_id"": 2964379, ""expected_slot"": ""weather""}",NODE_TIMEOUT
+1351,EVT-GW01-20260512-232325-214,UPL-GW01-20260513-052903,GW01,N3,node_missing,warning,2026-05-13 00:23:25+01,2026-05-13 06:29:59.263394+01,Node did not transmit during expected window,"{""frame_id"": 2964380, ""expected_slot"": ""weather""}",NODE_TIMEOUT
+1426,EVT-GW01-20260513-052902-289,UPL-GW01-20260513-052957,GW01,MAIN,gesture_detected,info,2026-05-13 06:29:02+01,2026-05-13 06:30:09.822891+01,Long-press on wake — upload trigger,{},
+1431,EVT-GW01-20260513-055643-299,UPL-GW01-20260515-045405,GW01,MAIN,unknown_packet,warning,2026-05-13 06:56:43+01,2026-05-15 05:54:49.413966+01,Received packet from unknown node,{},UNKNOWN_NODE
+1432,EVT-GW01-20260513-055643-300,UPL-GW01-20260515-045405,GW01,MAIN,unknown_packet,warning,2026-05-13 06:56:43+01,2026-05-15 05:54:49.413966+01,Received packet from unknown node,{},UNKNOWN_NODE
+1464,EVT-GW01-20260514-054950-001,UPL-GW01-20260515-045410,GW01,N2,packet_received,info,2026-05-14 06:49:50+01,2026-05-15 05:54:54.948262+01,Soil packet received,{},
+1467,EVT-GW01-20260514-060032-004,UPL-GW01-20260515-045410,GW01,N2,node_missing,warning,2026-05-14 07:00:32+01,2026-05-15 05:54:54.948262+01,Node did not transmit during expected window,"{""frame_id"": 2964563, ""expected_slot"": ""soil""}",NODE_TIMEOUT
+1468,EVT-GW01-20260514-060032-005,UPL-GW01-20260515-045410,GW01,N2,recovery_started,warning,2026-05-14 07:00:32+01,2026-05-15 05:54:54.948262+01,Node missed cycle — starting recovery watch,"{""missed_cycles"": 1, ""last_seen_frame"": 2964562}",
+1465,EVT-GW01-20260514-055008-002,UPL-GW01-20260515-045410,GW01,N3,packet_received,info,2026-05-14 06:50:08+01,2026-05-15 05:54:54.948262+01,Weather packet received,{},
+1466,EVT-GW01-20260514-060008-003,UPL-GW01-20260515-045410,GW01,N3,packet_received,info,2026-05-14 07:00:08+01,2026-05-15 05:54:54.948262+01,Weather packet received,{},
+1469,EVT-GW01-20260514-061001-006,UPL-GW01-20260515-045410,GW01,N3,packet_received,info,2026-05-14 07:10:01+01,2026-05-15 05:54:54.948262+01,Weather packet received,{},
+1560,EVT-GW01-20260514-131452-097,UPL-GW01-20260515-045410,GW01,MAIN,unknown_packet,warning,2026-05-14 14:14:52+01,2026-05-15 05:55:08.149934+01,Received packet from unknown node,{},UNKNOWN_NODE
+1593,EVT-GW01-20260514-155157-130,UPL-GW01-20260515-045410,GW01,MAIN,lora_init_failed,error,2026-05-14 16:51:57+01,2026-05-15 05:55:12.419224+01,LoRa SX1278 begin() failed,{},LORA_INIT_FAILED
+1690,EVT-GW01-20260514-230633-227,UPL-GW01-20260515-045410,GW01,N2,packet_received,info,2026-05-15 00:06:33+01,2026-05-15 05:55:26.691345+01,Soil packet received,{},
+1692,EVT-GW01-20260514-231627-229,UPL-GW01-20260515-045410,GW01,N2,packet_received,info,2026-05-15 00:16:27+01,2026-05-15 05:55:26.691345+01,Soil packet received,{},
+1694,EVT-GW01-20260514-232618-231,UPL-GW01-20260515-045410,GW01,N2,packet_received,info,2026-05-15 00:26:18+01,2026-05-15 05:55:28.159791+01,Soil packet received,{},
+1691,EVT-GW01-20260514-230704-228,UPL-GW01-20260515-045410,GW01,N3,packet_received,info,2026-05-15 00:07:04+01,2026-05-15 05:55:26.691345+01,Weather packet received,{},
+1693,EVT-GW01-20260514-231657-230,UPL-GW01-20260515-045410,GW01,N3,packet_received,info,2026-05-15 00:16:57+01,2026-05-15 05:55:26.691345+01,Weather packet received,{},
+1695,EVT-GW01-20260514-232649-232,UPL-GW01-20260515-045410,GW01,N3,packet_received,info,2026-05-15 00:26:49+01,2026-05-15 05:55:28.159791+01,Weather packet received,{},
+1705,EVT-GW01-20260515-001523-242,UPL-GW01-20260515-052456,GW01,MAIN,lora_init_failed,error,2026-05-15 01:15:23+01,2026-05-15 06:25:41.124669+01,LoRa SX1278 begin() failed,{},LORA_INIT_FAILED
+1772,EVT-GW01-20260515-045403-309,UPL-GW01-20260515-052456,GW01,MAIN,gesture_detected,info,2026-05-15 05:54:03+01,2026-05-15 06:25:51.667973+01,Long-press on wake — upload trigger,{},
+1775,EVT-GW01-20260515-052417-325,UPL-GW01-20260515-052456,GW01,MAIN,gesture_detected,info,2026-05-15 06:24:17+01,2026-05-15 06:25:51.667973+01,Long-press on wake — upload trigger,{},
+2030,EVT-GW01-20260515-230835-586,UPL-GW01-20260516-045501,GW01,N2,packet_received,info,2026-05-16 00:08:35+01,2026-05-16 05:55:52.289085+01,Soil packet received,{},
+2032,EVT-GW01-20260515-231828-588,UPL-GW01-20260516-045501,GW01,N2,packet_received,info,2026-05-16 00:18:28+01,2026-05-16 05:55:52.289085+01,Soil packet received,{},
+2034,EVT-GW01-20260515-232819-590,UPL-GW01-20260516-045501,GW01,N2,packet_received,info,2026-05-16 00:28:19+01,2026-05-16 05:55:52.289085+01,Soil packet received,{},
+2031,EVT-GW01-20260515-230905-587,UPL-GW01-20260516-045501,GW01,N3,packet_received,info,2026-05-16 00:09:05+01,2026-05-16 05:55:52.289085+01,Weather packet received,{},
+2033,EVT-GW01-20260515-231858-589,UPL-GW01-20260516-045501,GW01,N3,packet_received,info,2026-05-16 00:18:58+01,2026-05-16 05:55:52.289085+01,Weather packet received,{},
+2035,EVT-GW01-20260515-232850-591,UPL-GW01-20260516-045501,GW01,N3,packet_received,info,2026-05-16 00:28:50+01,2026-05-16 05:55:52.289085+01,Weather packet received,{},
+2105,EVT-GW01-20260516-045500-661,UPL-GW01-20260516-045542,GW01,MAIN,gesture_detected,info,2026-05-16 05:55:00+01,2026-05-16 05:56:04.457397+01,Long-press on wake — upload trigger,{},
+2236,EVT-GW01-20260516-141541-797,UPL-GW01-20260517-071537,GW01,MAIN,lora_init_failed,error,2026-05-16 15:15:41+01,2026-05-17 08:17:13.539423+01,LoRa SX1278 begin() failed,{},LORA_INIT_FAILED
+2241,EVT-GW01-20260516-142641-802,UPL-GW01-20260517-071537,GW01,MAIN,unknown_packet,warning,2026-05-16 15:26:41+01,2026-05-17 08:17:13.539423+01,Received packet from unknown node,{},UNKNOWN_NODE
+2355,EVT-GW01-20260517-071918-008,UPL-GW01-20260518-054620,GW01,N2,packet_received,info,2026-05-17 08:19:18+01,2026-05-18 06:47:13.505742+01,Soil packet received,{},
+2339,EVT-GW01-20260517-051956-001,UPL-GW01-20260517-071636,GW01,N2,node_missing,warning,2026-05-17 06:19:56+01,2026-05-17 08:17:29.547671+01,Node did not transmit during expected window,"{""frame_id"": 2964991, ""expected_slot"": ""soil""}",NODE_TIMEOUT
+2340,EVT-GW01-20260517-051956-002,UPL-GW01-20260517-071636,GW01,N2,recovery_started,warning,2026-05-17 06:19:56+01,2026-05-17 08:17:29.547671+01,Node missed cycle — starting recovery watch,"{""missed_cycles"": 1, ""last_seen_frame"": 0}",
+2341,EVT-GW01-20260517-051956-003,UPL-GW01-20260517-071636,GW01,N3,node_missing,warning,2026-05-17 06:19:56+01,2026-05-17 08:17:29.547671+01,Node did not transmit during expected window,"{""frame_id"": 2964991, ""expected_slot"": ""weather""}",NODE_TIMEOUT
+2342,EVT-GW01-20260517-051956-004,UPL-GW01-20260517-071636,GW01,N3,recovery_started,warning,2026-05-17 06:19:56+01,2026-05-17 08:17:29.547671+01,Node missed cycle — starting recovery watch,"{""missed_cycles"": 1, ""last_seen_frame"": 0}",
+2343,EVT-GW01-20260517-052020-001,UPL-GW01-20260517-071636,GW01,N3,packet_received,info,2026-05-17 06:20:20+01,2026-05-17 08:17:29.547671+01,Weather packet received,{},
+2350,EVT-GW01-20260517-070535-001,UPL-GW01-20260517-071636,GW01,MAIN,unknown_packet,warning,2026-05-17 08:05:35+01,2026-05-17 08:17:30.884874+01,Received packet from unknown node,{},UNKNOWN_NODE
+2353,EVT-GW01-20260517-071012-003,UPL-GW01-20260517-071636,GW01,MAIN,sensor_error,error,2026-05-17 08:10:12+01,2026-05-17 08:17:30.884874+01,Local RS485 soil sensor failed,{},LOCAL_SOIL_PARSE_FAILED
+2354,EVT-GW01-20260517-071535-004,UPL-GW01-20260517-071636,GW01,MAIN,gesture_detected,info,2026-05-17 08:15:35+01,2026-05-17 08:17:30.884874+01,Long-press on wake — upload trigger,{},
+2677,EVT-GW01-20260518-074254-007,UPL-GW01-20260519-051119,GW01,N2,packet_received,info,2026-05-18 08:42:54+01,2026-05-19 06:12:12.763028+01,Soil packet received,{},
+2581,EVT-GW01-20260517-230753-234,UPL-GW01-20260518-054620,GW01,N2,node_missing,warning,2026-05-18 00:07:53+01,2026-05-18 06:47:45.433756+01,Node did not transmit during expected window,"{""frame_id"": 2965098, ""expected_slot"": ""soil""}",NODE_TIMEOUT
+2583,EVT-GW01-20260517-231744-236,UPL-GW01-20260518-054620,GW01,N2,node_missing,warning,2026-05-18 00:17:44+01,2026-05-18 06:47:45.433756+01,Node did not transmit during expected window,"{""frame_id"": 2965099, ""expected_slot"": ""soil""}",NODE_TIMEOUT
+2580,EVT-GW01-20260517-230730-233,UPL-GW01-20260518-054620,GW01,N3,packet_received,info,2026-05-18 00:07:30+01,2026-05-18 06:47:45.433756+01,Weather packet received,{},
+2582,EVT-GW01-20260517-231722-235,UPL-GW01-20260518-054620,GW01,N3,packet_received,info,2026-05-18 00:17:22+01,2026-05-18 06:47:45.433756+01,Weather packet received,{},
+2584,EVT-GW01-20260517-232714-237,UPL-GW01-20260518-054620,GW01,N3,packet_received,info,2026-05-18 00:27:14+01,2026-05-18 06:47:45.433756+01,Weather packet received,{},
+2653,EVT-GW01-20260518-044219-306,UPL-GW01-20260518-054655,GW01,MAIN,unknown_packet,warning,2026-05-18 05:42:19+01,2026-05-18 06:47:56.98545+01,Received packet from unknown node,{},UNKNOWN_NODE
+2667,EVT-GW01-20260518-054618-320,UPL-GW01-20260518-054655,GW01,MAIN,gesture_detected,info,2026-05-18 06:46:18+01,2026-05-18 06:47:58.310784+01,Long-press on wake — upload trigger,{},
+2749,EVT-GW01-20260518-130837-079,UPL-GW01-20260519-051119,GW01,MAIN,unknown_packet,warning,2026-05-18 14:08:37+01,2026-05-19 06:12:25.061242+01,Received packet from unknown node,{},UNKNOWN_NODE
+2879,EVT-GW01-20260518-230131-209,UPL-GW01-20260519-051119,GW01,N3,packet_received,info,2026-05-19 00:01:31+01,2026-05-19 06:12:44.751833+01,Weather packet received,{},
+2881,EVT-GW01-20260518-231123-211,UPL-GW01-20260519-051119,GW01,N3,packet_received,info,2026-05-19 00:11:23+01,2026-05-19 06:12:44.751833+01,Weather packet received,{},
+2883,EVT-GW01-20260518-232115-213,UPL-GW01-20260519-051119,GW01,N3,packet_received,info,2026-05-19 00:21:15+01,2026-05-19 06:12:44.751833+01,Weather packet received,{},
+2880,EVT-GW01-20260518-230153-210,UPL-GW01-20260519-051119,GW01,N2,node_missing,warning,2026-05-19 00:01:53+01,2026-05-19 06:12:44.751833+01,Node did not transmit during expected window,"{""frame_id"": 2965242, ""expected_slot"": ""soil""}",NODE_TIMEOUT
+2882,EVT-GW01-20260518-231145-212,UPL-GW01-20260519-051119,GW01,N2,node_missing,warning,2026-05-19 00:11:45+01,2026-05-19 06:12:44.751833+01,Node did not transmit during expected window,"{""frame_id"": 2965243, ""expected_slot"": ""soil""}",NODE_TIMEOUT
+2884,EVT-GW01-20260518-232137-214,UPL-GW01-20260519-051119,GW01,N2,node_missing,warning,2026-05-19 00:21:37+01,2026-05-19 06:12:44.751833+01,Node did not transmit during expected window,"{""frame_id"": 2965244, ""expected_slot"": ""soil""}",NODE_TIMEOUT
+2892,EVT-GW01-20260519-051116-005,UPL-GW01-20260519-051154,GW01,MAIN,gesture_detected,info,2026-05-19 06:11:16+01,2026-05-19 06:12:47.593693+01,Long-press on wake — upload trigger,{},
+2945,EVT-GW01-20260519-083303-028,UPL-GW01-20260520-053640,GW01,MAIN,unknown_packet,warning,2026-05-19 09:33:03+01,2026-05-20 06:37:41.342636+01,Received packet from unknown node,{},UNKNOWN_NODE
+3298,EVT-GW01-20260520-172524-159,UPL-GW01-20260521-045053,GW01,MAIN,unknown_packet,warning,2026-05-20 18:25:24+01,2026-05-21 05:52:09.694176+01,Received packet from unknown node,{},UNKNOWN_NODE
+3139,EVT-GW01-20260520-053637-004,UPL-GW01-20260520-053717,GW01,MAIN,gesture_detected,info,2026-05-20 06:36:37+01,2026-05-20 06:38:10.941005+01,Long-press on wake — upload trigger,{},
+3295,EVT-GW01-20260520-171520-156,UPL-GW01-20260521-045053,GW01,MAIN,unknown_packet,warning,2026-05-20 18:15:20+01,2026-05-21 05:52:09.694176+01,Received packet from unknown node,{},UNKNOWN_NODE
+3125,EVT-GW01-20260519-230222-208,UPL-GW01-20260520-053640,GW01,N3,packet_received,info,2026-05-20 00:02:22+01,2026-05-20 06:38:08.132382+01,Weather packet received,{},
+3127,EVT-GW01-20260519-231213-210,UPL-GW01-20260520-053640,GW01,N3,packet_received,info,2026-05-20 00:12:13+01,2026-05-20 06:38:08.132382+01,Weather packet received,{},
+3130,EVT-GW01-20260519-232228-213,UPL-GW01-20260520-053640,GW01,N3,node_missing,warning,2026-05-20 00:22:28+01,2026-05-20 06:38:08.132382+01,Node did not transmit during expected window,"{""frame_id"": 2965388, ""expected_slot"": ""weather""}",NODE_TIMEOUT
+3126,EVT-GW01-20260519-230244-209,UPL-GW01-20260520-053640,GW01,N2,node_missing,warning,2026-05-20 00:02:44+01,2026-05-20 06:38:08.132382+01,Node did not transmit during expected window,"{""frame_id"": 2965386, ""expected_slot"": ""soil""}",NODE_TIMEOUT
+3128,EVT-GW01-20260519-231236-211,UPL-GW01-20260520-053640,GW01,N2,node_missing,warning,2026-05-20 00:12:36+01,2026-05-20 06:38:08.132382+01,Node did not transmit during expected window,"{""frame_id"": 2965387, ""expected_slot"": ""soil""}",NODE_TIMEOUT
+3129,EVT-GW01-20260519-232228-212,UPL-GW01-20260520-053640,GW01,N2,node_missing,warning,2026-05-20 00:22:28+01,2026-05-20 06:38:08.132382+01,Node did not transmit during expected window,"{""frame_id"": 2965388, ""expected_slot"": ""soil""}",NODE_TIMEOUT
+3299,DEMO_EVT_3299,,,N2,signal_quality_degraded,warning,2026-05-12T12:00:00+01:00,2026-05-12T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=5,demo_missing
+3300,DEMO_EVT_3300,,,N2,node_missing,warning,2026-05-12T12:00:00+01:00,2026-05-12T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=5,demo_missing
+3301,DEMO_EVT_3301,,,N2,telemetry_restored,info,2026-05-12T14:00:00+01:00,2026-05-12T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=5,
+3302,DEMO_EVT_3302,,,N2,signal_quality_improved,info,2026-05-12T15:00:00+01:00,2026-05-12T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=5,
+3303,DEMO_EVT_3303,,,N2,signal_quality_degraded,warning,2026-05-14T12:00:00+01:00,2026-05-14T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=3,demo_missing
+3304,DEMO_EVT_3304,,,N2,node_missing,warning,2026-05-14T12:00:00+01:00,2026-05-14T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=3,demo_missing
+3305,DEMO_EVT_3305,,,N2,telemetry_restored,info,2026-05-14T14:00:00+01:00,2026-05-14T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=3,
+3306,DEMO_EVT_3306,,,N2,signal_quality_improved,info,2026-05-14T15:00:00+01:00,2026-05-14T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=3,
+3307,DEMO_EVT_3307,,,N2,signal_quality_degraded,warning,2026-05-15T12:00:00+01:00,2026-05-15T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=9,demo_missing
+3308,DEMO_EVT_3308,,,N2,node_missing,warning,2026-05-15T12:00:00+01:00,2026-05-15T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=9,demo_missing
+3309,DEMO_EVT_3309,,,N2,telemetry_restored,info,2026-05-15T14:00:00+01:00,2026-05-15T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=9,
+3310,DEMO_EVT_3310,,,N2,signal_quality_improved,info,2026-05-15T15:00:00+01:00,2026-05-15T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=9,
+3311,DEMO_EVT_3311,,,N2,signal_quality_degraded,warning,2026-05-18T12:00:00+01:00,2026-05-18T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=22,demo_missing
+3312,DEMO_EVT_3312,,,N2,node_missing,warning,2026-05-18T12:00:00+01:00,2026-05-18T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=22,demo_missing
+3313,DEMO_EVT_3313,,,N2,telemetry_restored,info,2026-05-18T14:00:00+01:00,2026-05-18T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=22,
+3314,DEMO_EVT_3314,,,N2,signal_quality_improved,info,2026-05-18T15:00:00+01:00,2026-05-18T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=22,
+3315,DEMO_EVT_3315,,,N2,signal_quality_degraded,warning,2026-05-20T12:00:00+01:00,2026-05-20T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=2,demo_missing
+3316,DEMO_EVT_3316,,,N2,node_missing,warning,2026-05-20T12:00:00+01:00,2026-05-20T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=2,demo_missing
+3317,DEMO_EVT_3317,,,N2,telemetry_restored,info,2026-05-20T14:00:00+01:00,2026-05-20T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=2,
+3318,DEMO_EVT_3318,,,N2,signal_quality_improved,info,2026-05-20T15:00:00+01:00,2026-05-20T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=2,
+3319,DEMO_EVT_3319,,,N3,signal_quality_degraded,warning,2026-05-12T12:00:00+01:00,2026-05-12T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=5,demo_missing
+3320,DEMO_EVT_3320,,,N3,node_missing,warning,2026-05-12T12:00:00+01:00,2026-05-12T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=5,demo_missing
+3321,DEMO_EVT_3321,,,N3,telemetry_restored,info,2026-05-12T14:00:00+01:00,2026-05-12T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=5,
+3322,DEMO_EVT_3322,,,N3,signal_quality_improved,info,2026-05-12T15:00:00+01:00,2026-05-12T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=5,
+3323,DEMO_EVT_3323,,,N3,signal_quality_degraded,warning,2026-05-13T12:00:00+01:00,2026-05-13T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=4,demo_missing
+3324,DEMO_EVT_3324,,,N3,node_missing,warning,2026-05-13T12:00:00+01:00,2026-05-13T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=4,demo_missing
+3325,DEMO_EVT_3325,,,N3,telemetry_restored,info,2026-05-13T14:00:00+01:00,2026-05-13T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=4,
+3326,DEMO_EVT_3326,,,N3,signal_quality_improved,info,2026-05-13T15:00:00+01:00,2026-05-13T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=4,
+3327,DEMO_EVT_3327,,,N3,signal_quality_degraded,warning,2026-05-15T12:00:00+01:00,2026-05-15T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=8,demo_missing
+3328,DEMO_EVT_3328,,,N3,node_missing,warning,2026-05-15T12:00:00+01:00,2026-05-15T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=8,demo_missing
+3329,DEMO_EVT_3329,,,N3,telemetry_restored,info,2026-05-15T14:00:00+01:00,2026-05-15T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=8,
+3330,DEMO_EVT_3330,,,N3,signal_quality_improved,info,2026-05-15T15:00:00+01:00,2026-05-15T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=8,
+3331,DEMO_EVT_3331,,,N3,signal_quality_degraded,warning,2026-05-16T12:00:00+01:00,2026-05-16T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=5,demo_missing
+3332,DEMO_EVT_3332,,,N3,node_missing,warning,2026-05-16T12:00:00+01:00,2026-05-16T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=5,demo_missing
+3333,DEMO_EVT_3333,,,N3,telemetry_restored,info,2026-05-16T14:00:00+01:00,2026-05-16T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=5,
+3334,DEMO_EVT_3334,,,N3,signal_quality_improved,info,2026-05-16T15:00:00+01:00,2026-05-16T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=5,
+3335,DEMO_EVT_3335,,,N3,signal_quality_degraded,warning,2026-05-17T12:00:00+01:00,2026-05-17T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=1,demo_missing
+3336,DEMO_EVT_3336,,,N3,node_missing,warning,2026-05-17T12:00:00+01:00,2026-05-17T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=1,demo_missing
+3337,DEMO_EVT_3337,,,N3,telemetry_restored,info,2026-05-17T14:00:00+01:00,2026-05-17T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=1,
+3338,DEMO_EVT_3338,,,N3,signal_quality_improved,info,2026-05-17T15:00:00+01:00,2026-05-17T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=1,
+3339,DEMO_EVT_3339,,,N3,signal_quality_degraded,warning,2026-05-18T12:00:00+01:00,2026-05-18T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=23,demo_missing
+3340,DEMO_EVT_3340,,,N3,node_missing,warning,2026-05-18T12:00:00+01:00,2026-05-18T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=23,demo_missing
+3341,DEMO_EVT_3341,,,N3,telemetry_restored,info,2026-05-18T14:00:00+01:00,2026-05-18T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=23,
+3342,DEMO_EVT_3342,,,N3,signal_quality_improved,info,2026-05-18T15:00:00+01:00,2026-05-18T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=23,
+3343,DEMO_EVT_3343,,,N3,signal_quality_degraded,warning,2026-05-19T12:00:00+01:00,2026-05-19T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=5,demo_missing
+3344,DEMO_EVT_3344,,,N3,node_missing,warning,2026-05-19T12:00:00+01:00,2026-05-19T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=5,demo_missing
+3345,DEMO_EVT_3345,,,N3,telemetry_restored,info,2026-05-19T14:00:00+01:00,2026-05-19T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=5,
+3346,DEMO_EVT_3346,,,N3,signal_quality_improved,info,2026-05-19T15:00:00+01:00,2026-05-19T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=5,
+3347,DEMO_EVT_3347,,,N3,signal_quality_degraded,warning,2026-05-20T12:00:00+01:00,2026-05-20T12:00:00+01:00,Controlled synthetic degradation for dashboard QC test.,missing_injected=5,demo_missing
+3348,DEMO_EVT_3348,,,N3,node_missing,warning,2026-05-20T12:00:00+01:00,2026-05-20T12:00:00+01:00,Node telemetry gaps observed in demo scenario.,missing_injected=5,demo_missing
+3349,DEMO_EVT_3349,,,N3,telemetry_restored,info,2026-05-20T14:00:00+01:00,2026-05-20T14:00:00+01:00,Telemetry restored in demo scenario.,missing_injected=5,
+3350,DEMO_EVT_3350,,,N3,signal_quality_improved,info,2026-05-20T15:00:00+01:00,2026-05-20T15:00:00+01:00,Signal quality improved in demo scenario.,missing_injected=5,

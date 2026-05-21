@@ -364,6 +364,10 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
         add_if_col(rec, "started_at", start)
         add_if_col(rec, "finished_at", finish)
         add_if_col(rec, "received_at", finish)
+        created = (rec.get("received_at") or "").strip() or (rec.get("finished_at") or "").strip() or (rec.get("started_at") or "").strip()
+        add_if_col(rec, "created_at", created)
+        if "updated_at" in rec and not (rec.get("updated_at") or "").strip():
+            rec["updated_at"] = created
         add_if_col(rec, "records_count", str(len(rr)))
         add_if_col(rec, "events_count", str(len(ev)))
         add_if_col(rec, "raw_summary", json.dumps({"records_count": len(rr), "events_count": len(ev)}))
@@ -558,6 +562,9 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
     u_cols_out, u_rows_out = load_csv(OUT_DIR / "uploads_demo.csv")
     assert u_cols_out == upload_cols
     assert all((r.get("id") or "").strip() != "" for r in u_rows_out)
+    assert all((r.get("created_at") or "").strip() != "" for r in u_rows_out)
+    if "updated_at" in upload_cols:
+        assert all((r.get("updated_at") or "").strip() != "" for r in u_rows_out)
     assert len({r.get("upload_id", "") for r in u_rows_out}) == len(u_rows_out)
     sr_upload_ids = {(r.get("upload_id") or "").strip() for r in out_rows}
     u_upload_ids = {(r.get("upload_id") or "").strip() for r in u_rows_out}

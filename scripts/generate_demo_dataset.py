@@ -274,7 +274,7 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
             t = (datetime.fromisoformat(ts)+timedelta(hours=dh)).isoformat()
             if t < field_start.isoformat() or t > field_end.isoformat():
                 continue
-            out_events.append({"id": str(next_id), "event_id": f"DEMO_EVT_{next_id}", "upload_id": "", "gateway_id": "",
+            out_events.append({"id": str(next_id), "event_id": f"DEMO_EVT_{next_id}", "upload_id": "", "gateway_id": "GW01",
                                "node_id": node, "event_type": et, "severity": sev, "event_time": t, "received_at": t,
                                "message": msg, "details": json.dumps({"missing_injected": cnt}), "error_code": err})
             next_id += 1
@@ -326,6 +326,7 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
         final_id = style.format(dt=exp_start.strftime("%Y%m%d-%H%M"), pivot="1" if pivot == "P1" else "2")
         add_if_col(nr, "agro_event_id", final_id); add_if_col(nr, "gateway_id", "GW01")
         add_if_col(nr, "source", "scheduled_field_operation"); add_if_col(nr, "confidence", "exact")
+        add_if_col(nr, "created_at", nr["started_at"]); add_if_col(nr, "updated_at", nr["started_at"])
         if len(cycle["segments"]) > 1:
             add_if_col(nr, "notes", "paused_at_17:00_resumed_at_22:00")
         action = "kept" if (old_s == nr["started_at"] and (old_e or "") == nr["ended_at"] and old_t in (scope, node_id) and r.get("event_type","") == "irrigation_session") else "corrected"
@@ -340,6 +341,7 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
             resume["ended_at"] = cycle["segments"][1][1].isoformat()
             add_if_col(resume, "notes", "paused_at_17:00_resumed_at_22:00")
             add_if_col(resume, "agro_event_id", f"{final_id}-R")
+            add_if_col(resume, "created_at", resume["started_at"]); add_if_col(resume, "updated_at", resume["started_at"])
             corrected.append(resume)
             audit_rows.append({"audit_id": f"AUD-{len(audit_rows)+1:04d}", "original_agro_event_id": r.get("agro_event_id",""), "final_agro_event_id": resume.get("agro_event_id",""),
                                "action": "corrected", "old_started_at": old_s, "new_started_at": resume["started_at"], "old_ended_at": old_e, "new_ended_at": resume["ended_at"],
@@ -366,6 +368,7 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
             add_if_col(row, "ended_at", end.isoformat())
             add_if_col(row, "source", "scheduled_field_operation")
             add_if_col(row, "confidence", "exact")
+            add_if_col(row, "created_at", row["started_at"]); add_if_col(row, "updated_at", row["started_at"])
             note = "paused_at_17:00_resumed_at_22:00" if len(cycle["segments"]) > 1 else f"Scheduled 8-hour irrigation cycle for {'Pivot 1' if pivot=='P1' else 'Pivot 2'}."
             add_if_col(row, "notes", note)
             generated.append(row)

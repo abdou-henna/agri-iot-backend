@@ -9,3 +9,13 @@
 - MAIN remains excellent/stable.
 - All generated artifacts stay local in `demo_dataset/` and are git-ignored.
 - Demo dataset is synthetic/derived and not field-truth evidence.
+- Agronomic irrigation events are generated from a declared operational schedule:
+  - Start at `2026-05-12T07:00:00+01:00`
+  - Repeat every 8 hours
+  - Daily pause window is `17:00`–`22:00`; overlapping cycles are split into pause/resume segments with resume after `22:00`
+  - Resume segments are retained as irrigation events (not dropped) and may start after `22:00`
+- `agronomic_events_demo.csv` preserves source `csv/agronomic_events.csv` schema and column order.
+- Existing field-window agronomic rows are preserved; generated irrigation rows are appended without duplicate start-time+target keys.
+- Additional irrigation artifacts are emitted to:
+  - `demo_dataset/irrigation_schedule_audit.csv`
+  - `demo_dataset/irrigation_schedule_summary.csv`

@@ -4,6 +4,7 @@ import csv
 import hashlib
 import json
 import random
+import uuid
 from collections import Counter, defaultdict
 from copy import deepcopy
 from datetime import datetime, timedelta
@@ -84,6 +85,10 @@ def build_irrigation_cycles(field_start, field_end, start_at, interval_hours=8, 
 def add_if_col(row, col, value):
     if col in row:
         row[col] = value
+
+
+def deterministic_uuid(*parts):
+    return str(uuid.uuid5(uuid.NAMESPACE_URL, "|".join(parts)))
 
 
 def infer_cluster_range(rows):
@@ -271,7 +276,7 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
                 continue
             out_events.append({"id": str(next_id), "event_id": f"DEMO_EVT_{next_id}", "upload_id": "", "gateway_id": "",
                                "node_id": node, "event_type": et, "severity": sev, "event_time": t, "received_at": t,
-                               "message": msg, "details": f"missing_injected={cnt}", "error_code": err})
+                               "message": msg, "details": json.dumps({"missing_injected": cnt}), "error_code": err})
             next_id += 1
 
     with (OUT_DIR / "system_events_demo.csv").open("w", newline="", encoding="utf-8") as f:
@@ -350,7 +355,7 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
             if st > field_end or end < field_start:
                 continue
             row = {c: "" for c in agr_cols}
-            add_if_col(row, "id", f"irr-demo-{st.strftime('%Y%m%d%H%M')}")
+            add_if_col(row, "id", deterministic_uuid("agronomic_irrigation", base_id, st.isoformat(), str(seg_idx)))
             add_if_col(row, "node_id", node_id)
             add_if_col(row, "agro_event_id", base_id if seg_idx == 0 else f"{base_id}-R")
             add_if_col(row, "gateway_id", "GW01")

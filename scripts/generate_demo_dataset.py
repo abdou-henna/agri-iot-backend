@@ -229,13 +229,9 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
     inj = {}
     for node in ["N2", "N3"]:
         days = sorted(d for d, n in by_day_node if n == node)
-        for k, d in enumerate(days):
-            base = rng.randint(0, 5)
-            if k == len(days)//3:
-                base = rng.randint(8, 12)
-            if k == (2*len(days))//3:
-                base = rng.randint(20, 28)
-            inj[(d, node)] = base
+        for d in days:
+            # Keep missingness realistic but controlled for dashboard continuity.
+            inj[(d, node)] = rng.randint(0, 2) if node == "N3" else rng.randint(0, 4)
 
     controlled = Counter(); rare = set()
     for (day, node), target in inj.items():
@@ -247,6 +243,8 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
             r = reconstructed[i]; old = r["status"]
             r["status"] = "missing"
             for c in REQ[node]: r[c] = ""
+            if (r.get("error_code") or "").strip() == "":
+                r["error_code"] = "NODE_TELEMETRY_MISSING"
             controlled[(day, node)] += 1
             audit.append({"audit_id": str(audit_id), "original_id": r["id"], "demo_id": r["id"], "node_id": node,
                          "measured_at": r["measured_at"], "changed_fields": ";".join(REQ[node]), "original_status": old,
@@ -257,9 +255,6 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
             audit_id += 1
 
     OUT_DIR.mkdir(exist_ok=True)
-    with (OUT_DIR / "sensor_readings_demo.csv").open("w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=sensor_cols); w.writeheader(); w.writerows(reconstructed)
-
     filtered_events = []
     for e in event_rows:
         try: dt = parse_dt(e["event_time"])
@@ -274,24 +269,114 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
     for _, evs in by_ev.items(): out_events.extend(evs[:3])
     next_id = max([int(e["id"]) for e in out_events] + [0]) + 1
     for (day, node), cnt in controlled.items():
-        if cnt == 0: continue
-        ts = f"{day}T12:00:00+01:00"
-        for et,sev,msg,err,dh in [
-            ("signal_quality_degraded","warning","Controlled synthetic degradation for dashboard QC test.","demo_missing",0),
-            ("node_missing","warning","Node telemetry gaps observed in demo scenario.","demo_missing",0),
-            ("telemetry_restored","info","Telemetry restored in demo scenario.","",2),
-            ("signal_quality_improved","info","Signal quality improved in demo scenario.","",3),
-        ]:
-            t = (datetime.fromisoformat(ts)+timedelta(hours=dh)).isoformat()
-            if t < field_start.isoformat() or t > field_end.isoformat():
-                continue
-            out_events.append({"id": str(next_id), "event_id": f"DEMO_EVT_{next_id}", "upload_id": "", "gateway_id": "GW01",
-                               "node_id": node, "event_type": et, "severity": sev, "event_time": t, "received_at": t,
-                               "message": msg, "details": json.dumps({"missing_injected": cnt}), "error_code": err})
-            next_id += 1
+        if cnt == 0:
+            continue
 
+    # Rebuild system events from sensor timeline for realistic operational logs.
+    out_events = []
+    event_id_seq = defaultdict(int)
+    node_last = {}
+    for r in sorted(reconstructed, key=lambda x: parse_dt(x["measured_at"])):
+        node = r["node_id"]
+        ts = parse_dt(r["measured_at"])
+        ts_key = ts.strftime("%Y%m%d-%H%M%S")
+        event_id_seq[(node, ts_key)] += 1
+        seq = event_id_seq[(node, ts_key)]
+        ev_id = f"EVT-GW01-{ts_key}-{node}-{seq:04d}"
+        st = r["status"]
+        missing_like = st in ("missing", "error")
+        err = (r.get("error_code") or "").strip()
+        if err.lower() in {"demo_missing", "controlled_missing", "synthetic_missing", "generated_missing"}:
+            err = "NODE_TELEMETRY_MISSING"
+        packet = {
+            "id": str(next_id),
+            "event_id": ev_id,
+            "upload_id": r.get("upload_id", ""),
+            "gateway_id": (r.get("gateway_id") or "").strip() or "GW01",
+            "node_id": node,
+            "event_type": "node_missing" if missing_like else "packet_received",
+            "severity": "warning" if missing_like else "info",
+            "event_time": r["measured_at"],
+            "received_at": r.get("received_at") or r["measured_at"],
+            "message": "Expected node telemetry missing." if missing_like else "Sensor packet received.",
+            "details": json.dumps({
+                "record_id": r["id"],
+                "frame_id": r.get("frame_id"),
+                "node_type": r.get("node_type"),
+                "status": "missing" if missing_like else "ok",
+            }),
+            "error_code": (err or "NODE_TELEMETRY_MISSING") if missing_like else "",
+        }
+        out_events.append(packet)
+        next_id += 1
+        prev = node_last.get(node)
+        if prev in ("missing", "error") and st == "ok":
+            event_id_seq[(node, ts_key)] += 1
+            seq2 = event_id_seq[(node, ts_key)]
+            out_events.append({
+                "id": str(next_id),
+                "event_id": f"EVT-GW01-{ts_key}-{node}-{seq2:04d}",
+                "upload_id": r.get("upload_id", ""),
+                "gateway_id": (r.get("gateway_id") or "").strip() or "GW01",
+                "node_id": node,
+                "event_type": "node_back_online",
+                "severity": "info",
+                "event_time": r["measured_at"],
+                "received_at": r.get("received_at") or r["measured_at"],
+                "message": "Node telemetry back online after missing interval.",
+                "details": json.dumps({"previous_status": "missing", "current_status": "ok", "record_id": r["id"]}),
+                "error_code": "",
+            })
+            next_id += 1
+        node_last[node] = st
     with (OUT_DIR / "system_events_demo.csv").open("w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=event_cols); w.writeheader(); w.writerows(out_events)
+
+    # Build uploads metadata consistent with generated readings and events.
+    upload_cols, upload_rows = load_csv(uploads_path)
+    by_upload_readings = defaultdict(list)
+    for r in reconstructed:
+        up = (r.get("upload_id") or "").strip() or f"UP-{r['measured_at'][:13].replace(':','').replace('T','-')}-{r['node_id']}"
+        r["upload_id"] = up
+        by_upload_readings[up].append(r)
+    by_upload_events = defaultdict(list)
+    for e in out_events:
+        up = (e.get("upload_id") or "").strip()
+        by_upload_events[up].append(e)
+    max_upload_id = 0
+    for u in upload_rows:
+        try:
+            max_upload_id = max(max_upload_id, int((u.get("id") or "").strip()))
+        except Exception:
+            continue
+    next_upload_id = max_upload_id + 1 if max_upload_id > 0 else 1
+    uploads_out = []
+    for up_id, rr in sorted(by_upload_readings.items(), key=lambda x: min(parse_dt(i["measured_at"]) for i in x[1])):
+        ev = by_upload_events.get(up_id, [])
+        start = min(parse_dt(i["measured_at"]) for i in rr).isoformat()
+        finish = max(parse_dt(i["measured_at"]) for i in rr).isoformat()
+        rec = {c: "" for c in upload_cols}
+        add_if_col(rec, "id", str(next_upload_id))
+        next_upload_id += 1
+        add_if_col(rec, "upload_id", up_id)
+        add_if_col(rec, "gateway_id", "GW01")
+        add_if_col(rec, "status", "completed")
+        add_if_col(rec, "started_at", start)
+        add_if_col(rec, "finished_at", finish)
+        add_if_col(rec, "received_at", finish)
+        created = (rec.get("received_at") or "").strip() or (rec.get("finished_at") or "").strip() or (rec.get("started_at") or "").strip()
+        add_if_col(rec, "created_at", created)
+        if "updated_at" in rec and not (rec.get("updated_at") or "").strip():
+            rec["updated_at"] = created
+        add_if_col(rec, "records_count", str(len(rr)))
+        add_if_col(rec, "events_count", str(len(ev)))
+        add_if_col(rec, "raw_summary", json.dumps({"records_count": len(rr), "events_count": len(ev)}))
+        uploads_out.append(rec)
+    with (OUT_DIR / "uploads_demo.csv").open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=upload_cols); w.writeheader(); w.writerows(uploads_out)
+    # Persist readings after deterministic upload_id normalization.
+    with (OUT_DIR / "sensor_readings_demo.csv").open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=sensor_cols); w.writeheader(); w.writerows(reconstructed)
 
     agr_path = CSV_DIR / "agronomic_events.csv"
     if not agr_path.exists():
@@ -473,6 +558,25 @@ def generate(seed=SEED, field_start=FIELD_START_DEFAULT, field_end=FIELD_END_DEF
     with (OUT_DIR / "system_events_demo.csv").open(newline="", encoding="utf-8") as f:
         ev_out = list(csv.DictReader(f))
     assert all(RTC_CUTOFF <= parse_dt(e["event_time"]) <= field_end and parse_dt(e["event_time"]) >= field_start for e in ev_out)
+
+    u_cols_out, u_rows_out = load_csv(OUT_DIR / "uploads_demo.csv")
+    assert u_cols_out == upload_cols
+    assert all((r.get("id") or "").strip() != "" for r in u_rows_out)
+    assert all((r.get("created_at") or "").strip() != "" for r in u_rows_out)
+    if "updated_at" in upload_cols:
+        assert all((r.get("updated_at") or "").strip() != "" for r in u_rows_out)
+    assert len({r.get("upload_id", "") for r in u_rows_out}) == len(u_rows_out)
+    sr_upload_ids = {(r.get("upload_id") or "").strip() for r in out_rows}
+    u_upload_ids = {(r.get("upload_id") or "").strip() for r in u_rows_out}
+    assert sr_upload_ids.issubset(u_upload_ids)
+    ev_upload_ids = {(e.get("upload_id") or "").strip() for e in ev_out if (e.get("upload_id") or "").strip()}
+    assert ev_upload_ids.issubset(u_upload_ids)
+    assert sum(int((r.get("records_count") or "0").strip() or 0) for r in u_rows_out) == len(out_rows)
+    assert sum(int((r.get("events_count") or "0").strip() or 0) for r in u_rows_out) == len(ev_out)
+    for r in u_rows_out:
+        rs = (r.get("raw_summary") or "").strip()
+        if rs:
+            json.loads(rs)
 
     assert all("2026-05-12" <= r["date"] <= "2026-05-20" for r in qrows)
     assert all(field_start <= parse_dt(a["measured_at"]) <= field_end for a in audit)
